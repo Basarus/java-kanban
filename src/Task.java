@@ -1,14 +1,12 @@
-import java.util.*;
+import java.util.Objects;
 
 class Task {
-    private static int idCounter = 1;
-    private final int id;
+    private int id;
     private String name;
     private String description;
     private Status status;
 
     public Task(String name, String description, Status status) {
-        this.id = idCounter++;
         this.name = name;
         this.description = description;
         this.status = status;
@@ -16,6 +14,10 @@ class Task {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
