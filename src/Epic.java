@@ -17,6 +17,10 @@ class Epic extends Task {
         subtasks.add(subtask);
     }
 
+    public void removeSubtask(Subtask subtask) {
+        subtasks.remove(subtask);
+    }
+
     public void updateStatus() {
         boolean allDone = true;
         boolean allNew = true;
