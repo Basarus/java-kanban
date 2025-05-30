@@ -1,7 +1,9 @@
+package kanban;
+
 import java.util.ArrayList;
 import java.util.List;
 
-class Epic extends Task {
+public class Epic extends Task {
     private final List<Subtask> subtasks;
 
     public Epic(String name, String description) {
@@ -14,7 +16,12 @@ class Epic extends Task {
     }
 
     public void addSubtask(Subtask subtask) {
+
+        if (subtask != null && subtask.getId() == this.getId()) {
+            throw new IllegalArgumentException("Эпик не может быть своей собственной подзадачей");
+        }
         subtasks.add(subtask);
+
     }
 
     public void removeSubtask(Subtask subtask) {

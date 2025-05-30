@@ -1,6 +1,8 @@
+package kanban;
+
 import java.util.Objects;
 
-class Task {
+public class Task {
     private int id;
     private String name;
     private String description;
@@ -59,7 +61,7 @@ class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "kanban.Task{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
