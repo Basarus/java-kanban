@@ -1,4 +1,4 @@
-package kanban;
+package kanban.managers;
 
 public class Managers {
     public static TaskManager getDefault() {

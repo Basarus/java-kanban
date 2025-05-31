@@ -1,4 +1,4 @@
-package kanban;
+package kanban.tasks;
 
 public class Subtask extends Task {
     private final Epic epic;
@@ -10,7 +10,7 @@ public class Subtask extends Task {
             throw new IllegalArgumentException("Эпик не может быть null");
         }
 
-        if (epic.getId() == this.getId()) {
+        if (epic.getId() != 0 && epic.getId() == this.getId()) {
             throw new IllegalArgumentException("Подзадача не может быть своим же эпиком");
         }
 

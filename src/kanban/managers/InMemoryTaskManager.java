@@ -1,4 +1,8 @@
-package kanban;
+package kanban.managers;
+
+import kanban.tasks.Subtask;
+import kanban.tasks.Task;
+import kanban.tasks.Epic;
 
 import java.util.*;
 
@@ -36,9 +40,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     public Task getTaskById(int id) {
         Task task = tasks.get(id);
-        if (task != null) {
-            historyManager.add(task);
-        }
+        historyManager.add(task);
         return task;
     }
 

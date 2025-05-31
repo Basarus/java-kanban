@@ -1,4 +1,6 @@
-package kanban;
+package kanban.managers;
+
+import kanban.tasks.Task;
 
 import java.util.*;
 
@@ -7,6 +9,8 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
+        if (task == null) return;
+
         history.add(task);
         if (history.size() > 10) {
             history.remove(0);

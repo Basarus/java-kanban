@@ -1,6 +1,8 @@
 package test;
 
-import kanban.*;
+import kanban.managers.HistoryManager;
+import kanban.managers.Managers;
+import kanban.managers.TaskManager;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

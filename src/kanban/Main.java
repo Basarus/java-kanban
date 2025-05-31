@@ -1,5 +1,12 @@
 package kanban;
 
+import kanban.managers.Managers;
+import kanban.managers.TaskManager;
+import kanban.tasks.Epic;
+import kanban.tasks.Status;
+import kanban.tasks.Subtask;
+import kanban.tasks.Task;
+
 public class Main {
     public static void main(String[] args) {
         TaskManager manager = Managers.getDefault();

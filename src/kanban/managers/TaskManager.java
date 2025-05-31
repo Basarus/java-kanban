@@ -1,4 +1,8 @@
-package kanban;
+package kanban.managers;
+
+import kanban.tasks.Task;
+import kanban.tasks.Epic;
+import kanban.tasks.Subtask;
 
 import java.util.List;
 

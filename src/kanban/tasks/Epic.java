@@ -1,4 +1,4 @@
-package kanban;
+package kanban.tasks;
 
 import java.util.ArrayList;
 import java.util.List;

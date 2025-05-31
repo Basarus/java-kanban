@@ -1,6 +1,9 @@
 package test;
 
-import kanban.*;
+import kanban.tasks.Epic;
+import kanban.tasks.Status;
+import kanban.tasks.Subtask;
+import kanban.tasks.Task;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
