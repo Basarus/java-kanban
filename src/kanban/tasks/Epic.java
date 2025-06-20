@@ -20,6 +20,7 @@ public class Epic extends Task {
         if (subtask != null && subtask.getId() == this.getId()) {
             throw new IllegalArgumentException("Эпик не может быть своей собственной подзадачей");
         }
+
         subtasks.add(subtask);
 
     }
