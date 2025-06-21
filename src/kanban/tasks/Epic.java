@@ -1,9 +1,11 @@
 package kanban.tasks;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 public class Epic extends Task {
+
     private final List<Subtask> subtasks;
 
     public Epic(String name, String description) {

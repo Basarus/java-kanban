@@ -1,6 +1,7 @@
 package kanban.tasks;
 
 public class Subtask extends Task {
+
     private final Epic epic;
 
     public Subtask(String name, String description, Status status, Epic epic) {
