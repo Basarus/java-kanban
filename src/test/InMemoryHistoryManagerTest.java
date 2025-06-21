@@ -1,10 +1,15 @@
 package test;
 
 import kanban.managers.HistoryManager;
+
 import kanban.managers.InMemoryHistoryManager;
+
 import kanban.tasks.Status;
+
 import kanban.tasks.Task;
+
 import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

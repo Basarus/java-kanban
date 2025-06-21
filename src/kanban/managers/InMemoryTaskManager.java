@@ -7,10 +7,15 @@ import kanban.tasks.Epic;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
+
     private static int idCounter = 1;
+
     private final Map<Integer, Task> tasks;
+
     private final Map<Integer, Epic> epics;
+
     private final Map<Integer, Subtask> subtasks;
+
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     public InMemoryTaskManager() {
