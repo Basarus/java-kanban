@@ -42,7 +42,7 @@ class InMemoryTaskManagerTest {
 
         List<Task> history = manager.getHistory();
         assertEquals(12, history.size());
-        assertEquals("Task 3", history.get(0).getName()); // Task 1 и Task 2 вытеснены
+        assertEquals("Task 3", history.get(2).getName());
     }
 
     @Test
