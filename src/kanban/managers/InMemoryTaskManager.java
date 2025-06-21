@@ -35,10 +35,19 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public void addSubtask(Subtask subtask) {
-        subtask.setId(idCounter++);
-        subtasks.put(subtask.getId(), subtask);
+        if (subtask.getEpic() == null) {
+            throw new IllegalArgumentException("Подзадача должна быть привязана к эпику.");
+        }
 
         Epic epic = subtask.getEpic();
+
+        if (subtask.getId() == epic.getId()) {
+            throw new IllegalArgumentException("Подзадача не может ссылаться на свой же эпик (ID совпадают).");
+        }
+
+        subtask.setId(idCounter++);
+
+        subtasks.put(subtask.getId(), subtask);
         epic.addSubtask(subtask);
         epic.updateStatus();
     }

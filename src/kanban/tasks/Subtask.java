@@ -11,10 +11,6 @@ public class Subtask extends Task {
             throw new IllegalArgumentException("Эпик не может быть null");
         }
 
-        if (epic.getId() != 0 && epic.getId() == this.getId()) {
-            throw new IllegalArgumentException("Подзадача не может быть своим же эпиком");
-        }
-
         this.epic = epic;
     }
 

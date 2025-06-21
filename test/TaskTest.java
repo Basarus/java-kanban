@@ -1,5 +1,6 @@
-package test;
+package kanban.test;
 
+import kanban.managers.InMemoryTaskManager;
 import kanban.tasks.Epic;
 import kanban.tasks.Status;
 import kanban.tasks.Subtask;
@@ -53,9 +54,19 @@ class TaskTest {
 
     @Test
     void subtaskCannotBeItsOwnEpic() {
+        InMemoryTaskManager manager = new InMemoryTaskManager();
+
         Epic epic = new Epic("Epic", "desc");
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Subtask("Sub", "desc", Status.NEW, (Epic)(Task) epic);
-        });
+        manager.addEpic(epic);
+
+        Subtask subtask = new Subtask("Sub", "desc", Status.NEW, epic);
+        subtask.setId(epic.getId());
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> manager.addSubtask(subtask)
+        );
+
+        assertEquals("Подзадача не может ссылаться на свой же эпик (ID совпадают).", exception.getMessage());
     }
 }

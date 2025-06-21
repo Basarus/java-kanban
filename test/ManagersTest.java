@@ -1,4 +1,4 @@
-package test;
+package kanban.test;
 
 import kanban.managers.HistoryManager;
 
