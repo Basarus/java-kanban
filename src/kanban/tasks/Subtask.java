@@ -15,6 +15,10 @@ public class Subtask extends Task {
             throw new IllegalArgumentException("Подзадача не может быть своим же эпиком");
         }
 
+        if (this.getId() == epic.getId()) {
+            throw new IllegalArgumentException("Подзадача не может быть эпиком");
+        }
+
         this.epic = epic;
     }
 
