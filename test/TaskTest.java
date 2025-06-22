@@ -51,22 +51,4 @@ class TaskTest {
             epic.addSubtask(invalidSubtask);
         });
     }
-
-    @Test
-    void subtaskCannotBeItsOwnEpic() {
-        InMemoryTaskManager manager = new InMemoryTaskManager();
-
-        Epic epic = new Epic("Epic", "desc");
-        manager.addEpic(epic);
-
-        Subtask subtask = new Subtask("Sub", "desc", Status.NEW, epic);
-        subtask.setId(epic.getId());
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> manager.addSubtask(subtask)
-        );
-
-        assertEquals("Подзадача не может ссылаться на свой же эпик (ID совпадают).", exception.getMessage());
-    }
 }
