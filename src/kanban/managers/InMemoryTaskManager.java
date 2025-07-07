@@ -8,15 +8,15 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private static int idCounter = 1;
+    public static int idCounter = 1;
 
-    private final Map<Integer, Task> tasks;
+    public final Map<Integer, Task> tasks;
 
-    private final Map<Integer, Epic> epics;
+    public final Map<Integer, Epic> epics;
 
-    private final Map<Integer, Subtask> subtasks;
+    public final Map<Integer, Subtask> subtasks;
 
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    final HistoryManager historyManager = Managers.getDefaultHistory();
 
     public InMemoryTaskManager() {
         tasks = new HashMap<>();
@@ -35,11 +35,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public void addSubtask(Subtask subtask) {
-        if (subtask.getEpic() == null) {
+        if (epics.get(subtask.getEpicId()) == null) {
             throw new IllegalArgumentException("Подзадача должна быть привязана к эпику.");
         }
 
-        Epic epic = subtask.getEpic();
+        Epic epic = epics.get(subtask.getEpicId());
 
         if (subtask.getId() == epic.getId()) {
             throw new IllegalArgumentException("Подзадача не может ссылаться на свой же эпик (ID совпадают).");
@@ -84,7 +84,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     public void updateSubtask(Subtask subtask) {
         subtasks.put(subtask.getId(), subtask);
-        Epic epic = subtask.getEpic();
+        Epic epic = epics.get(subtask.getEpicId());
         epic.updateStatus();
     }
 
@@ -107,7 +107,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeSubtaskById(int id) {
         Subtask subtask = subtasks.remove(id);
         if (subtask != null) {
-            Epic epic = subtask.getEpic();
+            Epic epic = epics.get(subtask.getEpicId());
             epic.removeSubtask(subtask);
             epic.updateStatus();
             historyManager.remove(id);
@@ -160,4 +160,9 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
+    public void updateNextId(int lastId) {
+        if (lastId >= idCounter) {
+            idCounter = lastId + 1;
+        }
+    }
 }
