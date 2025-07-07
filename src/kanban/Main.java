@@ -34,7 +34,28 @@ public class Main {
         manager.getEpicById(epic1.getId());
         manager.getSubtaskById(subtask2.getId());
 
+        for (int i = 1; i <= 10; i++) {
+            Task extra = new Task("Задача " + i, "Описание " + i, Status.NEW);
+            manager.addTask(extra);
+            manager.getTaskById(extra.getId());
+        }
+
         printAll(manager);
+
+        manager.getSubtaskById(subtask1.getId());
+        manager.getEpicById(epic1.getId());
+        manager.getSubtaskById(subtask2.getId());
+        manager.getTaskById(task2.getId());
+        manager.getSubtaskById(subtask1.getId());
+        manager.getEpicById(epic2.getId());
+
+        printHistory(manager, "После повторных запросов:");
+
+        manager.removeTaskById(task2.getId());
+        printHistory(manager, "После удаления task2:");
+
+        manager.removeEpicById(epic1.getId());
+        printHistory(manager, "После удаления epic1 и его подзадач:");
 
         task2.setStatus(Status.DONE);
         epic1.updateStatus();
@@ -65,7 +86,11 @@ public class Main {
             System.out.println(subtask);
         }
 
-        System.out.println("\n==== История просмотров ====");
+        printHistory(manager, "История просмотров:");
+    }
+
+    private static void printHistory(TaskManager manager, String title) {
+        System.out.println("\n==== " + title + " ====");
         for (Task task : manager.getHistory()) {
             System.out.println(task);
         }

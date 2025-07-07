@@ -1,5 +1,6 @@
-package test;
+package kanban.test;
 
+import kanban.managers.InMemoryTaskManager;
 import kanban.tasks.Epic;
 import kanban.tasks.Status;
 import kanban.tasks.Subtask;
@@ -48,14 +49,6 @@ class TaskTest {
 
         assertThrows(IllegalArgumentException.class, () -> {
             epic.addSubtask(invalidSubtask);
-        });
-    }
-
-    @Test
-    void subtaskCannotBeItsOwnEpic() {
-        Epic epic = new Epic("Epic", "desc");
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Subtask("Sub", "desc", Status.NEW, (Epic)(Task) epic);
         });
     }
 }
