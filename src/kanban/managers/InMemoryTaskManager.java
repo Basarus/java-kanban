@@ -8,7 +8,7 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    public static int idCounter = 1;
+    protected static int idCounter = 1;
 
     public final Map<Integer, Task> tasks;
 
