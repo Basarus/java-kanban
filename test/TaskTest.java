@@ -1,4 +1,4 @@
-package kanban.test;
+package test;
 
 import kanban.managers.InMemoryTaskManager;
 import kanban.tasks.Epic;

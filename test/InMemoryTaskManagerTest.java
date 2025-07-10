@@ -1,4 +1,4 @@
-package kanban.test;
+package test;
 
 import kanban.managers.InMemoryTaskManager;
 import kanban.managers.TaskManager;
@@ -49,10 +49,10 @@ class InMemoryTaskManagerTest {
     void managerHandlesAllTaskTypes() {
         Task t = new Task("T", "d", Status.NEW);
         Epic e = new Epic("E", "d");
-        Subtask s = new Subtask("S", "d", Status.NEW, e);
-
         manager.addTask(t);
         manager.addEpic(e);
+
+        Subtask s = new Subtask("S", "d", Status.NEW, e.getId());
         manager.addSubtask(s);
 
         assertEquals(t, manager.getTaskById(t.getId()));
