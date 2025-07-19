@@ -1,17 +1,15 @@
 package test;
 
 import kanban.managers.HistoryManager;
-
 import kanban.managers.InMemoryHistoryManager;
-
 import kanban.tasks.Status;
-
 import kanban.tasks.Task;
 
 import org.junit.jupiter.api.BeforeEach;
-
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +25,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void addSingleTaskToHistory() {
-        Task task = new Task("Task", "desc", Status.NEW);
+        Task task = new Task("Task", "desc", Status.NEW, Duration.ofMinutes(30), LocalDateTime.now());
         task.setId(1);
         historyManager.add(task);
 
@@ -38,7 +36,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void historyShouldNotContainDuplicates() {
-        Task task = new Task("Task", "desc", Status.NEW);
+        Task task = new Task("Task", "desc", Status.NEW, Duration.ofMinutes(30), LocalDateTime.now());
         task.setId(1);
 
         historyManager.add(task);
@@ -52,9 +50,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void historyMaintainsCorrectOrder() {
-        Task t1 = new Task("T1", "desc", Status.NEW);
-        Task t2 = new Task("T2", "desc", Status.NEW);
-        Task t3 = new Task("T3", "desc", Status.NEW);
+        Task t1 = new Task("T1", "desc", Status.NEW, Duration.ofMinutes(10), LocalDateTime.now());
+        Task t2 = new Task("T2", "desc", Status.NEW, Duration.ofMinutes(20), LocalDateTime.now());
+        Task t3 = new Task("T3", "desc", Status.NEW, Duration.ofMinutes(30), LocalDateTime.now());
         t1.setId(1);
         t2.setId(2);
         t3.setId(3);
@@ -69,8 +67,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void duplicateMovesTaskToEnd() {
-        Task t1 = new Task("T1", "desc", Status.NEW);
-        Task t2 = new Task("T2", "desc", Status.NEW);
+        Task t1 = new Task("T1", "desc", Status.NEW, Duration.ofMinutes(10), LocalDateTime.now());
+        Task t2 = new Task("T2", "desc", Status.NEW, Duration.ofMinutes(10), LocalDateTime.now());
         t1.setId(1);
         t2.setId(2);
 
@@ -84,8 +82,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void removeTaskFromHistory() {
-        Task t1 = new Task("T1", "desc", Status.NEW);
-        Task t2 = new Task("T2", "desc", Status.NEW);
+        Task t1 = new Task("T1", "desc", Status.NEW, Duration.ofMinutes(10), LocalDateTime.now());
+        Task t2 = new Task("T2", "desc", Status.NEW, Duration.ofMinutes(10), LocalDateTime.now());
         t1.setId(1);
         t2.setId(2);
 
@@ -100,9 +98,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void removeHeadAndTail() {
-        Task t1 = new Task("Head", "desc", Status.NEW);
-        Task t2 = new Task("Middle", "desc", Status.NEW);
-        Task t3 = new Task("Tail", "desc", Status.NEW);
+        Task t1 = new Task("Head", "desc", Status.NEW, Duration.ofMinutes(10), LocalDateTime.now());
+        Task t2 = new Task("Middle", "desc", Status.NEW, Duration.ofMinutes(10), LocalDateTime.now());
+        Task t3 = new Task("Tail", "desc", Status.NEW, Duration.ofMinutes(10), LocalDateTime.now());
         t1.setId(1);
         t2.setId(2);
         t3.setId(3);
@@ -119,7 +117,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void historyPreservesTaskState() {
-        Task task = new Task("X", "Y", Status.NEW);
+        Task task = new Task("X", "Y", Status.NEW, Duration.ofMinutes(5), LocalDateTime.now());
         task.setId(1);
 
         historyManager.add(task);
@@ -131,7 +129,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void removeNonExistentTaskDoesNothing() {
-        Task task = new Task("Task", "desc", Status.NEW);
+        Task task = new Task("Task", "desc", Status.NEW, Duration.ofMinutes(10), LocalDateTime.now());
         task.setId(1);
         historyManager.add(task);
         historyManager.remove(999);

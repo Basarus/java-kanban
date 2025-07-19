@@ -1,5 +1,6 @@
 package test;
 
+import kanban.managers.FileBackedTaskManager;
 import kanban.managers.InMemoryTaskManager;
 import kanban.managers.TaskManager;
 import kanban.tasks.Epic;
@@ -9,6 +10,9 @@ import kanban.tasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +28,8 @@ class InMemoryTaskManagerTest {
 
     @Test
     void addAndGetTask() {
-        Task task = new Task("Test task", "Description", Status.NEW);
+        Task task = new Task("Test task", "Description", Status.NEW,
+                Duration.ofMinutes(15), LocalDateTime.now());
         manager.addTask(task);
 
         Task retrieved = manager.getTaskById(task.getId());
@@ -35,7 +40,8 @@ class InMemoryTaskManagerTest {
     @Test
     void historyShouldContainLastViewedTasks() {
         for (int i = 1; i <= 12; i++) {
-            Task task = new Task("Task " + i, "desc", Status.NEW);
+            Task task = new Task("Task " + i, "desc", Status.NEW,
+                    Duration.ofMinutes(10), LocalDateTime.now());
             manager.addTask(task);
             manager.getTaskById(task.getId());
         }
@@ -47,12 +53,14 @@ class InMemoryTaskManagerTest {
 
     @Test
     void managerHandlesAllTaskTypes() {
-        Task t = new Task("T", "d", Status.NEW);
+        Task t = new Task("T", "d", Status.NEW,
+                Duration.ofMinutes(20), LocalDateTime.now());
         Epic e = new Epic("E", "d");
         manager.addTask(t);
         manager.addEpic(e);
 
-        Subtask s = new Subtask("S", "d", Status.NEW, e.getId());
+        Subtask s = new Subtask("S", "d", Status.NEW,
+                Duration.ofMinutes(25), LocalDateTime.now(), e.getId());
         manager.addSubtask(s);
 
         assertEquals(t, manager.getTaskById(t.getId()));
@@ -62,19 +70,22 @@ class InMemoryTaskManagerTest {
 
     @Test
     void manuallySetIdDoesNotConflict() {
-        Task t1 = new Task("A", "B", Status.NEW);
-        t1.setId(100); // вручную устанавливаем id
+        Task t1 = new Task("A", "B", Status.NEW,
+                Duration.ofMinutes(15), LocalDateTime.now());
+        t1.setId(100);
         manager.addTask(t1);
 
-        Task t2 = new Task("Another", "B", Status.NEW);
-        manager.addTask(t2); // должен получить новый id
+        Task t2 = new Task("Another", "B", Status.NEW,
+                Duration.ofMinutes(15), LocalDateTime.now());
+        manager.addTask(t2);
 
         assertNotEquals(100, t2.getId());
     }
 
     @Test
     void taskRemainsUnchangedAfterAdding() {
-        Task original = new Task("Fixed", "Desc", Status.NEW);
+        Task original = new Task("Fixed", "Desc", Status.NEW,
+                Duration.ofMinutes(20), LocalDateTime.now());
         manager.addTask(original);
         Task copy = manager.getTaskById(original.getId());
 
@@ -90,7 +101,8 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Epic", "desc");
         manager.addEpic(epic);
 
-        Subtask subtask = new Subtask("Sub", "desc", Status.NEW, epic);
+        Subtask subtask = new Subtask("Sub", "desc", Status.NEW,
+                Duration.ofMinutes(30), LocalDateTime.now(), epic);
         subtask.setId(epic.getId());
 
         IllegalArgumentException exception = assertThrows(
