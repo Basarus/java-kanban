@@ -143,10 +143,11 @@ class InMemoryTaskManagerTest {
     @Test
     void shouldSaveAndLoadTaskWithStartTimeAndDuration() {
         File file = new File("test-tasks.csv");
-        FileBackedTaskManager original = new FileBackedTaskManager(file);
+        FileBackedTaskManager manager = new FileBackedTaskManager(file);
+
         Task task = new Task("Serializable", "Test", Status.NEW,
                 Duration.ofMinutes(45), LocalDateTime.of(2025, 7, 21, 13, 0));
-        original.addTask(task);
+        manager.addTask(task);  // автоматически сохранит в файл
 
         FileBackedTaskManager reloaded = FileBackedTaskManager.loadFromFile(file);
         Task loaded = reloaded.getTaskById(task.getId());
