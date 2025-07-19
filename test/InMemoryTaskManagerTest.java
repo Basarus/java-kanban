@@ -41,7 +41,7 @@ class InMemoryTaskManagerTest {
     void historyShouldContainLastViewedTasks() {
         for (int i = 1; i <= 12; i++) {
             Task task = new Task("Task " + i, "desc", Status.NEW,
-                    Duration.ofMinutes(10), LocalDateTime.now());
+                    Duration.ofMinutes(5), LocalDateTime.of(2025, 7, 20, 10, 0).plusMinutes(i * 10));
             manager.addTask(task);
             manager.getTaskById(task.getId());
         }
@@ -71,12 +71,12 @@ class InMemoryTaskManagerTest {
     @Test
     void manuallySetIdDoesNotConflict() {
         Task t1 = new Task("A", "B", Status.NEW,
-                Duration.ofMinutes(15), LocalDateTime.now());
+                Duration.ofMinutes(15), LocalDateTime.of(2025, 7, 20, 10, 0));
         t1.setId(100);
         manager.addTask(t1);
 
         Task t2 = new Task("Another", "B", Status.NEW,
-                Duration.ofMinutes(15), LocalDateTime.now());
+                Duration.ofMinutes(15), LocalDateTime.of(2025, 7, 20, 11, 0));
         manager.addTask(t2);
 
         assertNotEquals(100, t2.getId());
@@ -142,11 +142,13 @@ class InMemoryTaskManagerTest {
 
     @Test
     void shouldSaveAndLoadTaskWithStartTimeAndDuration() {
+        File file = new File("test-tasks.csv");
+        FileBackedTaskManager original = new FileBackedTaskManager(file);
         Task task = new Task("Serializable", "Test", Status.NEW,
                 Duration.ofMinutes(45), LocalDateTime.of(2025, 7, 21, 13, 0));
-        manager.addTask(task);
+        original.addTask(task);
 
-        FileBackedTaskManager reloaded = FileBackedTaskManager.loadFromFile(new File("test-tasks.csv"));
+        FileBackedTaskManager reloaded = FileBackedTaskManager.loadFromFile(file);
         Task loaded = reloaded.getTaskById(task.getId());
 
         assertEquals(task.getStartTime(), loaded.getStartTime());
