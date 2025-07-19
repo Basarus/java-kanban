@@ -100,4 +100,53 @@ class InMemoryTaskManagerTest {
 
         assertEquals("Подзадача не может ссылаться на свой же эпик (ID совпадают).", exception.getMessage());
     }
+
+    @Test
+    void shouldThrowIfTasksIntersectInTime() {
+        Task t1 = new Task("T1", "desc", Status.NEW,
+                Duration.ofMinutes(60), LocalDateTime.of(2025, 7, 20, 10, 0));
+        Task t2 = new Task("T2", "desc", Status.NEW,
+                Duration.ofMinutes(30), LocalDateTime.of(2025, 7, 20, 10, 30));
+        manager.addTask(t1);
+        assertThrows(IllegalArgumentException.class, () -> manager.addTask(t2));
+    }
+
+    @Test
+    void prioritizedTasksShouldBeSortedByStartTime() {
+        Task t1 = new Task("T1", "desc", Status.NEW,
+                Duration.ofMinutes(30), LocalDateTime.of(2025, 7, 20, 12, 0));
+        Task t2 = new Task("T2", "desc", Status.NEW,
+                Duration.ofMinutes(30), LocalDateTime.of(2025, 7, 20, 10, 0));
+        Task t3 = new Task("T3", "desc", Status.NEW,
+                Duration.ofMinutes(30), LocalDateTime.of(2025, 7, 20, 11, 0));
+
+        manager.addTask(t1);
+        manager.addTask(t2);
+        manager.addTask(t3);
+
+        List<Task> sorted = manager.getPrioritizedTasks();
+        assertEquals(List.of(t2, t3, t1), sorted);
+    }
+
+    @Test
+    void shouldSaveAndLoadTaskWithStartTimeAndDuration() {
+        Task task = new Task("Serializable", "Test", Status.NEW,
+                Duration.ofMinutes(45), LocalDateTime.of(2025, 7, 21, 13, 0));
+        manager.addTask(task);
+
+        FileBackedTaskManager reloaded = FileBackedTaskManager.loadFromFile(new File("test-tasks.csv"));
+        Task loaded = reloaded.getTaskById(task.getId());
+
+        assertEquals(task.getStartTime(), loaded.getStartTime());
+        assertEquals(task.getDuration(), loaded.getDuration());
+    }
+
+    @Test
+    void getEndTimeShouldReturnCorrectTime() {
+        LocalDateTime start = LocalDateTime.of(2025, 7, 22, 9, 0);
+        Duration duration = Duration.ofMinutes(90);
+        Task task = new Task("EndTime", "Check", Status.NEW, duration, start);
+
+        assertEquals(start.plusMinutes(90), task.getEndTime());
+    }
 }
