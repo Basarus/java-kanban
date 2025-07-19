@@ -147,7 +147,7 @@ class InMemoryTaskManagerTest {
         FileBackedTaskManager savingManager = new FileBackedTaskManager(file);
         Task task = new Task("Serializable", "Test", Status.NEW,
                 Duration.ofMinutes(45), LocalDateTime.of(2025, 7, 21, 13, 0));
-        savingManager.addTask(task); // это вызовет save()
+        savingManager.addTask(task);
 
         FileBackedTaskManager reloaded = FileBackedTaskManager.loadFromFile(file);
         Task loaded = reloaded.getTaskById(task.getId());
