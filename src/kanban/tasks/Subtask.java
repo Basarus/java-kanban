@@ -1,20 +1,28 @@
 package kanban.tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
+    private final int epicId;
 
-    private final Epic epic;
-
-    public Subtask(String name, String description, Status status, Epic epic) {
-        super(name, description, status);
-
-        if (epic == null) {
-            throw new IllegalArgumentException("Эпик не может быть null");
-        }
-
-        this.epic = epic;
+    public Subtask(String name, String description, Status status, Duration duration, LocalDateTime startTime, Epic epic) {
+        super(name, description, status, duration, startTime);
+        this.epicId = epic.getId();
     }
 
-    public Epic getEpic() {
-        return epic;
+    public Subtask(String name, String description, Status status, Duration duration, LocalDateTime startTime, int epicId) {
+        super(name, description, status, duration, startTime);
+        this.epicId = epicId;
+    }
+
+    public int getEpicId() {
+        return epicId;
+    }
+
+    @Override
+    public TaskType getType() {
+        return TaskType.SUBTASK;
     }
 }
+
