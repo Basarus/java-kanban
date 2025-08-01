@@ -7,6 +7,7 @@ import kanban.tasks.Epic;
 import kanban.tasks.Status;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.*;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -14,6 +15,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HttpTaskManagerEpicsTest {
@@ -38,11 +40,11 @@ public class HttpTaskManagerEpicsTest {
 
     @Test
     void testCreateGetDeleteEpic() throws Exception {
-        Epic e = new Epic("EpicTest","DescEpic");
+        Epic e = new Epic("EpicTest", "DescEpic");
         String json = gson.toJson(e);
         HttpRequest post = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:3000/epics"))
-                .header("Content-Type","application/json")
+                .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
         HttpResponse<Void> postResp = client.send(post, HttpResponse.BodyHandlers.discarding());
@@ -58,7 +60,7 @@ public class HttpTaskManagerEpicsTest {
         int id = list[0].getId();
 
         HttpRequest getOne = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/epics?id="+id))
+                .uri(URI.create("http://localhost:3000/epics?id=" + id))
                 .GET().build();
         HttpResponse<String> getOneResp = client.send(getOne, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, getOneResp.statusCode());
@@ -66,7 +68,7 @@ public class HttpTaskManagerEpicsTest {
         assertEquals("EpicTest", fetched.getName());
 
         HttpRequest delete = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/epics?id="+id))
+                .uri(URI.create("http://localhost:3000/epics?id=" + id))
                 .DELETE().build();
         HttpResponse<Void> delResp = client.send(delete, HttpResponse.BodyHandlers.discarding());
         assertEquals(200, delResp.statusCode());

@@ -6,6 +6,7 @@ import kanban.managers.InMemoryTaskManager;
 import kanban.tasks.Task;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.*;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -13,6 +14,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HttpTaskManagerHistoryTest {
@@ -44,7 +46,7 @@ public class HttpTaskManagerHistoryTest {
         assertEquals(200, historyResp.statusCode());
         assertEquals("[]", historyResp.body());
 
-        Task t = new Task("HTest","HD", null, Duration.ofMinutes(10), LocalDateTime.now());
+        Task t = new Task("HTest", "HD", null, Duration.ofMinutes(10), LocalDateTime.now());
         manager.addTask(t);
         int id = manager.getAllTasks().get(0).getId();
         HttpRequest getOne = HttpRequest.newBuilder()

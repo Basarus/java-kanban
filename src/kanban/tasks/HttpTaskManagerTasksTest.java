@@ -11,6 +11,7 @@ import java.net.http.*;
 import java.net.URI;
 import java.time.Duration;
 import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HttpTaskManagerTasksTest {
@@ -37,11 +38,11 @@ public class HttpTaskManagerTasksTest {
 
     @Test
     void testCreateGetDeleteTask() throws Exception {
-        Task t = new Task("Test","Desc", Status.NEW, Duration.ofMinutes(30), LocalDateTime.now());
+        Task t = new Task("Test", "Desc", Status.NEW, Duration.ofMinutes(30), LocalDateTime.now());
         String json = gson.toJson(t);
         HttpRequest post = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:3000/tasks"))
-                .header("Content-Type","application/json")
+                .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
         HttpResponse<Void> postResp = client.send(post, HttpResponse.BodyHandlers.discarding());
@@ -57,7 +58,7 @@ public class HttpTaskManagerTasksTest {
         int id = list[0].getId();
 
         HttpRequest getOne = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/tasks?id="+id))
+                .uri(URI.create("http://localhost:3000/tasks?id=" + id))
                 .GET().build();
         HttpResponse<String> getOneResp = client.send(getOne, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, getOneResp.statusCode());
@@ -65,7 +66,7 @@ public class HttpTaskManagerTasksTest {
         assertEquals("Test", fetched.getName());
 
         HttpRequest delete = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/tasks?id="+id))
+                .uri(URI.create("http://localhost:3000/tasks?id=" + id))
                 .DELETE().build();
         HttpResponse<Void> delResp = client.send(delete, HttpResponse.BodyHandlers.discarding());
         assertEquals(200, delResp.statusCode());
