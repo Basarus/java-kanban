@@ -39,9 +39,7 @@ public class HttpTaskManagerHistoryTest {
 
     @Test
     void testHistoryEmptyAndAfterAccess() throws Exception {
-        HttpRequest getHistory = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/history"))
-                .GET().build();
+        HttpRequest getHistory = HttpRequest.newBuilder().uri(URI.create("http://localhost:3000/history")).GET().build();
         HttpResponse<String> historyResp = client.send(getHistory, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, historyResp.statusCode());
         assertEquals("[]", historyResp.body());
@@ -49,9 +47,7 @@ public class HttpTaskManagerHistoryTest {
         Task t = new Task("HTest", "HD", null, Duration.ofMinutes(10), LocalDateTime.now());
         manager.addTask(t);
         int id = manager.getAllTasks().get(0).getId();
-        HttpRequest getOne = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/tasks?id=" + id))
-                .GET().build();
+        HttpRequest getOne = HttpRequest.newBuilder().uri(URI.create("http://localhost:3000/tasks?id=" + id)).GET().build();
         client.send(getOne, HttpResponse.BodyHandlers.ofString());
 
         historyResp = client.send(getHistory, HttpResponse.BodyHandlers.ofString());

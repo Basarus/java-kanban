@@ -42,34 +42,24 @@ public class HttpTaskManagerEpicsTest {
     void testCreateGetDeleteEpic() throws Exception {
         Epic e = new Epic("EpicTest", "DescEpic");
         String json = gson.toJson(e);
-        HttpRequest post = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/epics"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
+        HttpRequest post = HttpRequest.newBuilder().uri(URI.create("http://localhost:3000/epics")).header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(json)).build();
         HttpResponse<Void> postResp = client.send(post, HttpResponse.BodyHandlers.discarding());
         assertEquals(201, postResp.statusCode());
 
-        HttpRequest getAll = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/epics"))
-                .GET().build();
+        HttpRequest getAll = HttpRequest.newBuilder().uri(URI.create("http://localhost:3000/epics")).GET().build();
         HttpResponse<String> getAllResp = client.send(getAll, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, getAllResp.statusCode());
         Epic[] list = gson.fromJson(getAllResp.body(), Epic[].class);
         assertEquals(1, list.length);
         int id = list[0].getId();
 
-        HttpRequest getOne = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/epics?id=" + id))
-                .GET().build();
+        HttpRequest getOne = HttpRequest.newBuilder().uri(URI.create("http://localhost:3000/epics?id=" + id)).GET().build();
         HttpResponse<String> getOneResp = client.send(getOne, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, getOneResp.statusCode());
         Epic fetched = gson.fromJson(getOneResp.body(), Epic.class);
         assertEquals("EpicTest", fetched.getName());
 
-        HttpRequest delete = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/epics?id=" + id))
-                .DELETE().build();
+        HttpRequest delete = HttpRequest.newBuilder().uri(URI.create("http://localhost:3000/epics?id=" + id)).DELETE().build();
         HttpResponse<Void> delResp = client.send(delete, HttpResponse.BodyHandlers.discarding());
         assertEquals(200, delResp.statusCode());
 

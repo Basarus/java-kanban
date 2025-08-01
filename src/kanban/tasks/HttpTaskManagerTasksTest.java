@@ -26,9 +26,7 @@ public class HttpTaskManagerTasksTest {
         manager = new InMemoryTaskManager();
         server = new HttpTaskServer(manager);
         server.start();
-        client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(1))
-                .build();
+        client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(1)).build();
     }
 
     @AfterEach
@@ -40,34 +38,24 @@ public class HttpTaskManagerTasksTest {
     void testCreateGetDeleteTask() throws Exception {
         Task t = new Task("Test", "Desc", Status.NEW, Duration.ofMinutes(30), LocalDateTime.now());
         String json = gson.toJson(t);
-        HttpRequest post = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/tasks"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
+        HttpRequest post = HttpRequest.newBuilder().uri(URI.create("http://localhost:3000/tasks")).header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(json)).build();
         HttpResponse<Void> postResp = client.send(post, HttpResponse.BodyHandlers.discarding());
         assertEquals(201, postResp.statusCode());
 
-        HttpRequest getAll = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/tasks"))
-                .GET().build();
+        HttpRequest getAll = HttpRequest.newBuilder().uri(URI.create("http://localhost:3000/tasks")).GET().build();
         HttpResponse<String> getAllResp = client.send(getAll, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, getAllResp.statusCode());
         Task[] list = gson.fromJson(getAllResp.body(), Task[].class);
         assertEquals(1, list.length);
         int id = list[0].getId();
 
-        HttpRequest getOne = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/tasks?id=" + id))
-                .GET().build();
+        HttpRequest getOne = HttpRequest.newBuilder().uri(URI.create("http://localhost:3000/tasks?id=" + id)).GET().build();
         HttpResponse<String> getOneResp = client.send(getOne, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, getOneResp.statusCode());
         Task fetched = gson.fromJson(getOneResp.body(), Task.class);
         assertEquals("Test", fetched.getName());
 
-        HttpRequest delete = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/tasks?id=" + id))
-                .DELETE().build();
+        HttpRequest delete = HttpRequest.newBuilder().uri(URI.create("http://localhost:3000/tasks?id=" + id)).DELETE().build();
         HttpResponse<Void> delResp = client.send(delete, HttpResponse.BodyHandlers.discarding());
         assertEquals(200, delResp.statusCode());
 

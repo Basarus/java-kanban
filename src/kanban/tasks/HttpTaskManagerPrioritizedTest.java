@@ -45,9 +45,7 @@ public class HttpTaskManagerPrioritizedTest {
         manager.addTask(t1);
         manager.addTask(t2);
 
-        HttpRequest getPrior = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/prioritized"))
-                .GET().build();
+        HttpRequest getPrior = HttpRequest.newBuilder().uri(URI.create("http://localhost:3000/prioritized")).GET().build();
         HttpResponse<String> priorResp = client.send(getPrior, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, priorResp.statusCode());
         Task[] ordered = gson.fromJson(priorResp.body(), Task[].class);
