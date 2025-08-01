@@ -3,8 +3,6 @@ package kanban.tasks;
 import kanban.http.HttpTaskServer;
 import kanban.managers.TaskManager;
 import kanban.managers.InMemoryTaskManager;
-import kanban.tasks.Epic;
-import kanban.tasks.Status;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.*;
 
@@ -13,8 +11,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
