@@ -36,21 +36,33 @@ public class SubtaskHandler extends BaseHttpHandler {
                     break;
                 case "POST":
                     var subtask = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), "UTF-8"), Subtask.class);
-                    if (subtask.getId() == 0) { manager.addSubtask(subtask); sendCreated(exchange); }
-                    else if (manager.getSubtaskById(subtask.getId()) != null) { manager.updateSubtask(subtask); sendCreated(exchange); }
-                    else sendNotFound(exchange);
+                    if (subtask.getId() == 0) {
+                        manager.addSubtask(subtask);
+                        sendCreated(exchange);
+                    } else if (manager.getSubtaskById(subtask.getId()) != null) {
+                        manager.updateSubtask(subtask);
+                        sendCreated(exchange);
+                    } else sendNotFound(exchange);
                     break;
                 case "DELETE":
-                    if (query == null) { manager.removeAllSubtasks(); sendOK(exchange, ""); }
-                    else {
+                    if (query == null) {
+                        manager.removeAllSubtasks();
+                        sendOK(exchange, "");
+                    } else {
                         int id = Integer.parseInt(query.split("=")[1]);
-                        if (manager.getSubtaskById(id) != null) { manager.removeSubtaskById(id); sendOK(exchange, ""); }
-                        else sendNotFound(exchange);
+                        if (manager.getSubtaskById(id) != null) {
+                            manager.removeSubtaskById(id);
+                            sendOK(exchange, "");
+                        } else sendNotFound(exchange);
                     }
                     break;
-                default: sendInternalError(exchange);
+                default:
+                    sendInternalError(exchange);
             }
-        } catch (NumberFormatException | JsonSyntaxException e) { sendNotAcceptable(exchange); }
-        catch (Exception e) { sendInternalError(exchange); }
+        } catch (NumberFormatException | JsonSyntaxException e) {
+            sendNotAcceptable(exchange);
+        } catch (Exception e) {
+            sendInternalError(exchange);
+        }
     }
 }

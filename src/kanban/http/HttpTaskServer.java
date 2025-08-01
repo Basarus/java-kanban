@@ -15,10 +15,7 @@ import java.time.LocalDateTime;
 
 public class HttpTaskServer {
     private static final int PORT = 3000;
-    private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .registerTypeAdapter(Duration.class, new DurationAdapter())
-            .create();
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).registerTypeAdapter(Duration.class, new DurationAdapter()).create();
     private final HttpServer server;
     private final TaskManager manager;
 

@@ -10,7 +10,9 @@ public class HistoryHandler extends BaseHttpHandler {
     private final TaskManager manager;
     private final Gson gson = HttpTaskServer.getGson();
 
-    public HistoryHandler(TaskManager manager) { this.manager = manager; }
+    public HistoryHandler(TaskManager manager) {
+        this.manager = manager;
+    }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
