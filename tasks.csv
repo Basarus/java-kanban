@@ -1,10 +1,3 @@
-id,type,name,status,description,epic
-1,EPIC,Подготовка к отпуску,IN_PROGRESS,Собрать документы вещи и т.д.,
-2,EPIC,Ремонт в квартире,IN_PROGRESS,Покрасить стены обновить мебель,
-3,TASK,Уборка,NEW,Пропылесосить и вымыть пол,
-4,TASK,Покупка еды,IN_PROGRESS,Купить продукты на неделю,
-5,SUBTASK,Сбор документов,NEW,Паспорта билеты,1
-6,SUBTASK,Сбор чемодана,DONE,Одежда и принадлежности,1
-7,SUBTASK,Покупка краски,IN_PROGRESS,Белая и серая краска,2
+id,type,name,status,description,startTime,duration,epic
+1,TASK,Test,NEW,тест,2025-08-01T10:00,15,
 
-3,6,1

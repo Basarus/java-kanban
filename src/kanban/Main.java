@@ -47,11 +47,6 @@ public class Main {
 
         System.out.println("== Источник: Память ==");
         printState(manager);
-
-        // Загрузка из файла
-        FileBackedTaskManager restored = FileBackedTaskManager.loadFromFile(file);
-        System.out.println("\n== Загружено из файла ==");
-        printState(restored);
     }
 
     private static void printState(TaskManager manager) {
@@ -70,7 +65,7 @@ public class Main {
             printTask(subtask);
         }
 
-        System.out.println("\n== История ==");
+         System.out.println("\n== История ==");
         for (Task task : manager.getHistory()) {
             System.out.println(task.getId() + ": " + task.getName());
         }
