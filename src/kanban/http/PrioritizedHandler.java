@@ -17,10 +17,9 @@ public class PrioritizedHandler extends BaseHttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if (!"GET".equals(exchange.getRequestMethod())) {
-            sendInternalError(exchange);
+            methodNotAllowed(exchange);
             return;
         }
-        var tasks = manager.getPrioritizedTasks();
-        sendOK(exchange, gson.toJson(tasks));
+        ok(exchange, gson.toJson(manager.getPrioritizedTasks()));
     }
 }

@@ -17,10 +17,10 @@ public class HistoryHandler extends BaseHttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if (!"GET".equals(exchange.getRequestMethod())) {
-            sendInternalError(exchange);
+            error(exchange);
             return;
         }
-        var history = manager.getHistory();
-        sendOK(exchange, gson.toJson(history));
+        ok(exchange, gson.toJson(manager.getHistory()));
     }
 }
+

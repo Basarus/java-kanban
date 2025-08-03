@@ -23,58 +23,52 @@ public class TaskHandler extends BaseHttpHandler {
         try {
             String method = exchange.getRequestMethod();
             URI uri = exchange.getRequestURI();
-            String query = uri.getQuery();
-
+            String q = uri.getQuery();
             switch (method) {
                 case "GET":
-                    if (query == null) {
-                        String json = gson.toJson(manager.getAllTasks());
-                        sendOK(exchange, json);
-                    } else {
-                        int id = Integer.parseInt(query.split("=")[1]);
-                        Task task = manager.getTaskById(id);
-                        if (task != null) {
-                            sendOK(exchange, gson.toJson(task));
-                        } else {
-                            sendNotFound(exchange);
-                        }
+                    if (q == null) ok(exchange, gson.toJson(manager.getAllTasks()));
+                    else {
+                        int id = Integer.parseInt(q.split("=")[1]);
+                        var t = manager.getTaskById(id);
+                        if (t != null) ok(exchange, gson.toJson(t));
+                        else notFound(exchange);
                     }
                     break;
                 case "POST":
                     Task task = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), "UTF-8"), Task.class);
-                    if (task.getId() == 0) {
-                        manager.addTask(task);
-                        sendCreated(exchange);
-                    } else {
-                        if (manager.getTaskById(task.getId()) != null) {
+                    try {
+                        if (task.getId() == 0) {
+                            manager.addTask(task);
+                            created(exchange);
+                        } else if (manager.getTaskById(task.getId()) != null) {
                             manager.updateTask(task);
-                            sendCreated(exchange);
+                            created(exchange);
                         } else {
-                            sendNotFound(exchange);
+                            notFound(exchange);
                         }
+                    } catch (IllegalArgumentException e) {
+                        notAcceptable(exchange);
                     }
                     break;
                 case "DELETE":
-                    if (query == null) {
+                    if (q == null) {
                         manager.removeAllTasks();
-                        sendOK(exchange, "");
+                        ok(exchange, "");
                     } else {
-                        int id = Integer.parseInt(query.split("=")[1]);
+                        int id = Integer.parseInt(q.split("=")[1]);
                         if (manager.getTaskById(id) != null) {
                             manager.removeTaskById(id);
-                            sendOK(exchange, "");
-                        } else {
-                            sendNotFound(exchange);
-                        }
+                            ok(exchange, "");
+                        } else notFound(exchange);
                     }
                     break;
                 default:
-                    sendInternalError(exchange);
+                    error(exchange);
             }
         } catch (NumberFormatException | JsonSyntaxException e) {
-            sendNotAcceptable(exchange);
+            notAcceptable(exchange);
         } catch (Exception e) {
-            sendInternalError(exchange);
+            error(exchange);
         }
     }
 }

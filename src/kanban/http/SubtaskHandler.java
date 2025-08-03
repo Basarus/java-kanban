@@ -23,46 +23,52 @@ public class SubtaskHandler extends BaseHttpHandler {
         try {
             String method = exchange.getRequestMethod();
             URI uri = exchange.getRequestURI();
-            String query = uri.getQuery();
+            String q = uri.getQuery();
             switch (method) {
                 case "GET":
-                    if (query == null) sendOK(exchange, gson.toJson(manager.getAllSubtasks()));
+                    if (q == null) ok(exchange, gson.toJson(manager.getAllSubtasks()));
                     else {
-                        int id = Integer.parseInt(query.split("=")[1]);
-                        var sub = manager.getSubtaskById(id);
-                        if (sub != null) sendOK(exchange, gson.toJson(sub));
-                        else sendNotFound(exchange);
+                        int id = Integer.parseInt(q.split("=")[1]);
+                        var s = manager.getSubtaskById(id);
+                        if (s != null) ok(exchange, gson.toJson(s));
+                        else notFound(exchange);
                     }
                     break;
                 case "POST":
-                    var subtask = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), "UTF-8"), Subtask.class);
-                    if (subtask.getId() == 0) {
-                        manager.addSubtask(subtask);
-                        sendCreated(exchange);
-                    } else if (manager.getSubtaskById(subtask.getId()) != null) {
-                        manager.updateSubtask(subtask);
-                        sendCreated(exchange);
-                    } else sendNotFound(exchange);
+                    Subtask sub = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), "UTF-8"), Subtask.class);
+                    try {
+                        if (sub.getId() == 0) {
+                            manager.addSubtask(sub);
+                            created(exchange);
+                        } else if (manager.getSubtaskById(sub.getId()) != null) {
+                            manager.updateSubtask(sub);
+                            created(exchange);
+                        } else {
+                            notFound(exchange);
+                        }
+                    } catch (IllegalArgumentException e) {
+                        notAcceptable(exchange);
+                    }
                     break;
                 case "DELETE":
-                    if (query == null) {
+                    if (q == null) {
                         manager.removeAllSubtasks();
-                        sendOK(exchange, "");
+                        ok(exchange, "");
                     } else {
-                        int id = Integer.parseInt(query.split("=")[1]);
+                        int id = Integer.parseInt(q.split("=")[1]);
                         if (manager.getSubtaskById(id) != null) {
                             manager.removeSubtaskById(id);
-                            sendOK(exchange, "");
-                        } else sendNotFound(exchange);
+                            ok(exchange, "");
+                        } else notFound(exchange);
                     }
                     break;
                 default:
-                    sendInternalError(exchange);
+                    error(exchange);
             }
         } catch (NumberFormatException | JsonSyntaxException e) {
-            sendNotAcceptable(exchange);
+            notAcceptable(exchange);
         } catch (Exception e) {
-            sendInternalError(exchange);
+            error(exchange);
         }
     }
 }

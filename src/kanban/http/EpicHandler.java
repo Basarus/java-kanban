@@ -23,46 +23,48 @@ public class EpicHandler extends BaseHttpHandler {
         try {
             String method = exchange.getRequestMethod();
             URI uri = exchange.getRequestURI();
-            String query = uri.getQuery();
+            String q = uri.getQuery();
             switch (method) {
                 case "GET":
-                    if (query == null) sendOK(exchange, gson.toJson(manager.getAllEpics()));
+                    if (q == null) ok(exchange, gson.toJson(manager.getAllEpics()));
                     else {
-                        int id = Integer.parseInt(query.split("=")[1]);
-                        var epic = manager.getEpicById(id);
-                        if (epic != null) sendOK(exchange, gson.toJson(epic));
-                        else sendNotFound(exchange);
+                        int id = Integer.parseInt(q.split("=")[1]);
+                        var e = manager.getEpicById(id);
+                        if (e != null) ok(exchange, gson.toJson(e));
+                        else notFound(exchange);
                     }
                     break;
                 case "POST":
-                    var epic = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), "UTF-8"), Epic.class);
+                    Epic epic = gson.fromJson(new InputStreamReader(exchange.getRequestBody(), "UTF-8"), Epic.class);
                     if (epic.getId() == 0) {
                         manager.addEpic(epic);
-                        sendCreated(exchange);
+                        created(exchange);
                     } else if (manager.getEpicById(epic.getId()) != null) {
                         manager.updateEpic(epic);
-                        sendCreated(exchange);
-                    } else sendNotFound(exchange);
+                        created(exchange);
+                    } else {
+                        notFound(exchange);
+                    }
                     break;
                 case "DELETE":
-                    if (query == null) {
+                    if (q == null) {
                         manager.removeAllEpics();
-                        sendOK(exchange, "");
+                        ok(exchange, "");
                     } else {
-                        int id = Integer.parseInt(query.split("=")[1]);
+                        int id = Integer.parseInt(q.split("=")[1]);
                         if (manager.getEpicById(id) != null) {
                             manager.removeEpicById(id);
-                            sendOK(exchange, "");
-                        } else sendNotFound(exchange);
+                            ok(exchange, "");
+                        } else notFound(exchange);
                     }
                     break;
                 default:
-                    sendInternalError(exchange);
+                    error(exchange);
             }
         } catch (NumberFormatException | JsonSyntaxException e) {
-            sendNotAcceptable(exchange);
+            notAcceptable(exchange);
         } catch (Exception e) {
-            sendInternalError(exchange);
+            error(exchange);
         }
     }
 }
